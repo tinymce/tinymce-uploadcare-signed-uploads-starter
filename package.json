@@ -1,0 +1,19 @@
+{
+    "name": "tinymce-uploadcare-signed-uploads-starter",
+    "version": "1.0.0",
+    "description": "",
+    "type": "module",
+    "scripts": {
+        "start": "node index"
+    },
+    "keywords": [],
+    "author": "Tiny Technologies Inc",
+    "license": "MIT",
+    "dependencies": {
+        "@uploadcare/signed-uploads": "^6.14.2",
+        "cors": "^2.8.5",
+        "crypto": "^1.0.1",
+        "dotenv": "^16.4.7",
+        "express": "^4.21.2"
+    }
+}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Replace with your TinyMCE API key -->
+    <script src="https://cdn.tiny.cloud/1/your-api-key/tinymce/7/tinymce.min.js"></script>
+    <title>TinyMCE Image Optimizer Signed Uploads Starter Project</title>
+</head>
+
+<body>
+    <textarea>
+        <p>To see the signed upload request, open the browser Network tab to see the signed upload request, then make an operation on the image below.</p>
+        <p><img src="https://google.com/logos/google.jpg" width="354" height="116" /></p>
+    </textarea>
+    <script type="text/javascript">
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'uploadcare',
+            toolbar: 'uploadcare',
+            uploadcare_store_type: 'temporary',         // auto, temporary, permanent
+            a11y_advanced_options: true,                // Show decorative images button
+            uploadcare_public_key: '<your-public-key>', // Replace with your public key
+            uploadcare_signed_upload_auth_provider: async (publicKey) => {
+                try {
+                    const response = await fetch('http://localhost:3000/signature');
+                    if (!response.ok) {
+                        throw new Error('Service returned an error: ' + response.statusText);
+                    }
+                    const data = await response.json();
+                    return {
+                        signature: data.signature,
+                        expire: data.expire,
+                    };
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
