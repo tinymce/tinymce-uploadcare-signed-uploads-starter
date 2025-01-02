@@ -1,14 +1,20 @@
+import "dotenv/config";
 import express from "express";
 import mustacheExpress from "mustache-express";
+import path from "path";
 import portfinder from "portfinder";
 import session from "express-session";
-import config from "./config.js";
-import { generateSecureSignature } from "@uploadcare/signed-uploads";
-import path from "path";
 import { fileURLToPath } from "url";
+import { generateSecureSignature } from "@uploadcare/signed-uploads";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// This is the fake database that the login authenticates against
+const users = [
+    { username: "johndoe", password: "password", fullname: "John Doe" },
+    { username: "janedoe", password: "password", fullname: "Jane Doe" },
+];
 
 const setupExpress = (port) => {
     const app = express();
@@ -20,7 +26,7 @@ const setupExpress = (port) => {
     app.set("trust proxy", 1);
     app.use(
         session({
-            secret: config.sessionSecret,
+            secret: process.env.SESSION_SECRET,
             resave: false,
             saveUninitialized: true,
             cookie: { secure: false },
@@ -47,8 +53,8 @@ const setupRoutes = (app) => {
     app.get("/editor", (req, res) => {
         if (req.session.user) {
             res.render("editor", {
-                apiKey: config.apiKey,
-                uploadcarePublicKey: config.uploadcarePublicKey,
+                apiKey: process.env.TINYMCE_API_KEY,
+                uploadcarePublicKey: process.env.UPLOADCARE_PUBLIC_KEY,
                 fullname: req.session.user.fullname,
             });
         } else {
@@ -62,7 +68,7 @@ const setupRoutes = (app) => {
     });
 
     app.post("/", (req, res) => {
-        const user = config.users.find(
+        const user = users.find(
             ({ username, password }) =>
                 username === req.body.username && password === req.body.password
         );
@@ -79,7 +85,7 @@ const setupRoutes = (app) => {
         if (user) {
             try {
                 const { secureSignature: signature, secureExpire: expire } =
-                    generateSecureSignature(config.uploadcareSecretKey, {
+                    generateSecureSignature(process.env.UPLOADCARE_SECRET_KEY, {
                         expire: Date.now() + 60 * 30 * 1000, // 30 minutes expiration
                     });
                 res.json({ signature, expire });
