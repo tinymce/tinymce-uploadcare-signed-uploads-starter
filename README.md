@@ -15,7 +15,6 @@ Copy the `.env.example` file to `.env` and fill in the required environment vari
 TINYMCE_API_KEY=your-api-key
 UPLOADCARE_PUBLIC_KEY=your-public-key
 UPLOADCARE_SECRET_KEY=your-secret-key
-SESSION_SECRET=your-session-secret
 ```
 
 ## Installation

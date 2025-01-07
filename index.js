@@ -26,7 +26,7 @@ const setupExpress = (port) => {
     app.set("trust proxy", 1);
     app.use(
         session({
-            secret: process.env.SESSION_SECRET,
+            secret: "your-session-secret",
             resave: false,
             saveUninitialized: true,
             cookie: { secure: false },
