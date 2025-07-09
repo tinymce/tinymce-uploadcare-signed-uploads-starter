@@ -18,6 +18,6 @@
         "express-session": "^1.18.1",
         "jsonwebtoken": "^9.0.2",
         "mustache-express": "^1.3.2",
-        "portfinder": "^1.0.32"
+        "portfinder": "^1.0.37"
     }
 }
